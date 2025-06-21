@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD MEHEDI HASAN - Data Portfolio Reimagined</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.9.3/tsparticles.slim.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            /* New Background Palette */
+            --bg-deep-space: #080C1F; /* Very dark, slightly purplish-blue base */
+            --bg-space-blue: #0F173A; /* For cards, slightly lighter */
+            --bg-nebula-blue: #1A234A; /* For accents or hover states on cards */
+
+            /* Text & Accent Colors (can remain similar or be tweaked) */
+            --text-star-white: #f0f8ff;
+            --text-galaxy-gray: #adb5bd;
+            --accent-hyperdrive-cyan: #00f5d4;
+            --accent-pulsar-purple: #9b5de5; /* Could be used more for highlights */
+            --border-asteroid: #2E3A59; /* Adjusted border for new BG */
+
+            --font-main: 'Exo 2', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+        }
+
+        html { scroll-padding-top: 80px; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main); background-color: var(--bg-deep-space);
+            color: var(--text-star-white); overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Preloader --- */
+        #preloader { background-color: var(--bg-deep-space); /* Updated */ }
+        /* ... (Keep other preloader styles from previous version) ... */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: opacity 0.5s ease-out 0.3s, visibility 0.5s ease-out 0.3s; }
+        #preloader.loaded { opacity: 0; visibility: hidden; pointer-events: none; }
+        .pulsing-dot { width: 20px; height: 20px; background-color: var(--accent-hyperdrive-cyan); border-radius: 50%; animation: pulse 1.5s infinite ease-in-out; }
+        @keyframes pulse { 0%, 100% { transform: scale(0.8); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } }
+
+
+        /* --- Navigation --- */
+        #main-header { border-bottom: 1px solid var(--border-asteroid); /* Updated */ }
+        .nav-scrolled { background-color: rgba(8, 12, 31, 0.85); /* Updated based on new --bg-deep-space */ }
+        /* ... (Keep other navigation styles from previous version) ... */
+        #main-header { transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease; }
+        .nav-hidden { transform: translateY(-100%); }
+        .nav-logo { font-family: var(--font-main); font-weight: 700; font-size: 1.8rem; color: var(--accent-hyperdrive-cyan); letter-spacing: 1px; }
+        .nav-link { font-family: var(--font-mono); color: var(--text-galaxy-gray); transition: color 0.2s ease, text-shadow 0.2s ease; padding: 0.25rem 0.5rem; }
+        .nav-link:hover, .nav-link.active { color: var(--accent-hyperdrive-cyan); text-shadow: 0 0 5px var(--accent-hyperdrive-cyan); }
+        .nav-link span { color: var(--accent-hyperdrive-cyan); margin-right: 0.25rem;}
+        .resume-button { color: var(--accent-hyperdrive-cyan); border: 1px solid var(--accent-hyperdrive-cyan); padding: 0.5rem 1rem; border-radius: 4px; font-family: var(--font-mono); font-size: 0.875rem; transition: background-color 0.2s ease, color 0.2s ease; }
+        .resume-button:hover { background-color: rgba(0, 245, 212, 0.1); }
+
+
+        /* --- Hero Section with 3D Text --- */
+        #hero { min-height: 100vh; display: flex; align-items: center; position: relative; perspective: 1000px; }
+        #particles-js-hero { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        /* ... (Keep other hero styles from previous version) ... */
+        .hero-content { position: relative; z-index: 1; }
+        .hero-greeting { font-family: var(--font-mono); color: var(--accent-hyperdrive-cyan); margin-bottom: 1rem; font-size: 1.1rem; }
+        .hero-name { font-family: var(--font-main); font-size: clamp(2.8rem, 8vw, 5rem); color: var(--text-star-white); font-weight: 700; line-height: 1.1; margin-bottom: 0.5rem; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+        .hero-title-3d { font-family: var(--font-main); font-size: clamp(1.8rem, 6vw, 3.5rem); color: var(--text-galaxy-gray); font-weight: 600; line-height: 1.2; margin-bottom: 1.5rem; min-height: 90px; transform-style: preserve-3d; }
+        .hero-description { font-size: 1.1rem; color: var(--text-galaxy-gray); max-width: 650px; margin-bottom: 2.5rem; line-height: 1.8; }
+
+
+        /* --- Section General --- */
+        .section-container { padding-top: 120px; padding-bottom: 120px; }
+        .section-title::after { background: linear-gradient(90deg, var(--accent-hyperdrive-cyan) 0%, var(--border-asteroid) 100%); /* Updated gradient */ opacity: 0.6; }
+        /* ... (Keep other section title styles from previous version) ... */
+        .section-title { font-family: var(--font-main); font-size: clamp(2rem, 5vw, 2.8rem); font-weight: 600; color: var(--text-star-white); margin-bottom: 4rem; display: flex; align-items: center; position: relative; }
+        .section-title .number { font-family: var(--font-mono); color: var(--accent-hyperdrive-cyan); margin-right: 1rem; font-size: 1.5rem; }
+
+
+        /* --- About Section --- */
+        .about-image-overlay { border: 2px solid var(--accent-hyperdrive-cyan); /* Updated border */ background: linear-gradient(135deg, rgba(0, 245, 212, 0.05), rgba(155, 93, 229, 0.05)); /* Softer overlay */ }
+        /* ... (Keep other about styles from previous version) ... */
+        .about-text p { margin-bottom: 1.25rem; line-height: 1.9; color: var(--text-galaxy-gray); font-size: 1.05rem; }
+        .about-skills-list { list-style-type: none; padding-left: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+        .about-skills-list li { font-family: var(--font-mono); font-size: 0.95rem; color: var(--text-galaxy-gray); display: flex; align-items: center; }
+        .about-skills-list li i { color: var(--accent-hyperdrive-cyan); margin-right: 0.75rem; font-size: 0.8rem; }
+        .about-image-container { position: relative; perspective: 800px; display: flex; justify-content: center; align-items: center;}
+        .about-image-wrapper { max-width: 320px; border-radius: 8px; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .about-image-wrapper:hover { transform: rotateY(15deg) rotateX(5deg) scale(1.05); }
+        .about-image-wrapper img { border-radius: 8px; display: block; width: 100%; filter: saturate(0.8) contrast(1.1); }
+        .about-image-overlay { position: absolute; inset: 0; border-radius: 8px; opacity: 0.5; transform: translateZ(10px); }
+
+        /* --- Experience Section (Timeline) --- */
+        .experience-timeline::before { background-color: var(--border-asteroid); /* Updated */ }
+        .timeline-item::before { border: 3px solid var(--bg-deep-space); /* Updated for new BG */ box-shadow: 0 0 10px var(--accent-hyperdrive-cyan); }
+        .timeline-item-content { background-color: var(--bg-space-blue); border: 1px solid var(--border-asteroid); /* Updated */ }
+        .timeline-item-content:hover { border-color: var(--accent-hyperdrive-cyan); box-shadow: 0 5px 25px rgba(0, 245, 212, 0.1); /* Updated shadow */ }
+        /* ... (Keep other timeline styles from previous version) ... */
+        .experience-timeline { position: relative; padding-left: 2.5rem; }
+        .timeline-item { position: relative; margin-bottom: 3rem; padding-left: 1.5rem; }
+        .timeline-title { font-size: 1.3rem; font-weight: 600; color: var(--text-star-white); margin-bottom: 0.25rem; }
+        .timeline-company { color: var(--accent-hyperdrive-cyan); font-weight: 500; margin-bottom: 0.25rem; }
+        .timeline-date { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-galaxy-gray); margin-bottom: 1rem; }
+        .timeline-details li { margin-bottom: 0.6rem; color: var(--text-galaxy-gray); font-size: 0.95rem; line-height: 1.75; }
+        .timeline-details li::before { content: '▹'; color: var(--accent-hyperdrive-cyan); margin-right: 0.75rem; font-weight: bold; }
+
+
+        /* --- Skills Section --- */
+        .skill-tag { background-color: var(--bg-nebula-blue); border: 1px solid var(--border-asteroid); /* Updated */ }
+        .skill-tag:hover { border-color: var(--accent-hyperdrive-cyan); box-shadow: 0 5px 15px rgba(0, 245, 212, 0.1); /* Updated shadow */ }
+        /* ... (Keep other skills styles from previous version) ... */
+        .skill-category { margin-bottom: 2.5rem; }
+        .skill-category-title { font-family: var(--font-main); font-size: 1.5rem; font-weight: 600; color: var(--accent-hyperdrive-cyan); margin-bottom: 1.25rem; display: flex; align-items: center;}
+        .skill-category-title i { margin-right: 1rem; font-size: 1.3em; }
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
+
+
+        /* --- Projects Section - 3D Card Tilt --- */
+        .project-card { background-color: var(--bg-space-blue); border: 1px solid var(--border-asteroid); /* Updated */ }
+        .project-card:hover { box-shadow: 0 10px 30px -15px rgba(0,0,0,0.4); /* Slightly stronger shadow for new BG */ } /* JS handles transform */
+        .project-tech-list span { background-color: var(--bg-nebula-blue); /* Updated */ }
+        /* ... (Keep other project card styles from previous version) ... */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; perspective: 1500px; }
+        .project-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+        .project-icon { font-size: 2.8rem; color: var(--accent-hyperdrive-cyan); transform: translateZ(20px); }
+        .project-links a { color: var(--text-galaxy-gray); margin-left: 1rem; font-size: 1.35rem; transition: color 0.2s ease; transform: translateZ(20px); }
+        .project-links a:hover { color: var(--accent-hyperdrive-cyan); }
+        .project-title { font-family: var(--font-main); font-size: 1.5rem; font-weight: 600; color: var(--text-star-white); margin-bottom: 0.75rem; transform: translateZ(15px); }
+        .project-description { font-size: 1rem; color: var(--text-galaxy-gray); line-height: 1.8; margin-bottom: 1.25rem; flex-grow: 1; transform: translateZ(10px); }
+        .project-tech-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: auto; transform: translateZ(5px); }
+
+
+        /* --- Contact Section --- */
+        /* ... (Keep contact styles from previous version, they should work fine) ... */
+        .contact-content { max-width: 650px; margin: 0 auto; text-align: center; }
+        .contact-title { font-family: var(--font-mono); font-size: 1.1rem; color: var(--accent-hyperdrive-cyan); margin-bottom: 0.75rem; }
+        .contact-heading { font-family: var(--font-main); font-size: clamp(2.2rem, 6vw, 3.8rem); font-weight: 700; color: var(--text-star-white); margin-bottom: 1.75rem; }
+        .contact-text { font-size: 1.15rem; color: var(--text-galaxy-gray); line-height: 1.9; margin-bottom: 3rem; }
+        .contact-button { font-size: 1.05rem; padding: 0.9rem 2.2rem; }
+
+
+        /* --- Footer --- */
+        footer { border-top: 1px solid var(--border-asteroid); /* Updated */ }
+        /* ... (Keep footer styles from previous version) ... */
+        .footer-social-links a { color: var(--text-galaxy-gray); margin: 0 1rem; font-size: 1.5rem; transition: color 0.2s ease, transform 0.2s ease; display: inline-block; }
+        .footer-social-links a:hover { color: var(--accent-hyperdrive-cyan); transform: translateY(-3px); }
+        .footer-text { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-galaxy-gray); margin-top: 1.5rem; }
+
+
+        #back-to-top { background-color: var(--accent-hyperdrive-cyan); color: var(--bg-deep-space); /* Updated */ box-shadow: 0 5px 20px rgba(0, 245, 212, 0.25); /* Updated shadow */ }
+        /* ... (Keep other back-to-top styles from previous version) ... */
+        #back-to-top:hover { opacity: 0.85; transform: scale(1.1) rotate(15deg); }
+
+
+        /* Mobile Menu */
+        .mobile-menu { background-color: var(--bg-space-blue); /* Updated */ }
+        /* ... (Keep other mobile menu styles from previous version) ... */
+        .mobile-menu-button { color: var(--text-star-white); }
+
+    </style>
+</head>
+<body>
+
+    <div id="preloader"><div class="pulsing-dot"></div></div>
+
+    <div id="particles-js-hero"></div>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50">
+        <!-- Navigation HTML from previous version -->
+        <nav class="container mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="#hero" class="nav-logo">MH</a>
+            <div class="hidden md:flex items-center space-x-5 lg:space-x-7">
+                <a href="#about" class="nav-link"><span>01.</span>About</a>
+                <a href="#experience" class="nav-link"><span>02.</span>Experience</a>
+                <a href="#skills" class="nav-link"><span>03.</span>Skills</a>
+                <a href="#projects" class="nav-link"><span>04.</span>Projects</a>
+                <a href="#contact" class="nav-link"><span>05.</span>Contact</a>
+                <a href="MD_MEHEDI_HASAN_Resume.pdf" target="_blank" class="resume-button ml-3">Resume</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-toggle" class="text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div id="mobile-menu" class="fixed inset-0 bg-bg-space-blue/95 backdrop-blur-md z-40 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden pt-24 p-8 space-y-8 text-center">
+        <!-- Mobile Navigation HTML from previous version -->
+        <a href="#about" class="block nav-link text-xl"><span>01.</span>About</a>
+        <a href="#experience" class="block nav-link text-xl"><span>02.</span>Experience</a>
+        <a href="#skills" class="block nav-link text-xl"><span>03.</span>Skills</a>
+        <a href="#projects" class="block nav-link text-xl"><span>04.</span>Projects</a>
+        <a href="#contact" class="block nav-link text-xl"><span>05.</span>Contact</a>
+        <a href="MD_MEHEDI_HASAN_Resume.pdf" target="_blank" class="resume-button inline-block mt-8 text-lg">Resume</a>
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+        <!-- Hero Section HTML from previous version -->
+        <section id="hero" class="hero-content">
+            <div data-aos="fade-up" data-aos-duration="800">
+                <p class="hero-greeting">Hello, world! My name is</p>
+                <h1 class="hero-name">MD MEHEDI HASAN.</h1>
+                <h2 class="hero-title-3d"><span id="typed-hero-subtitle"></span></h2>
+                <p class="hero-description">
+                    I'm a Data Analytics Professional & Business Intelligence Specialist specializing in transforming complex data into clear, actionable insights. I architect data solutions and craft compelling narratives that drive strategic business decisions. Currently seeking H1B sponsorship opportunities in the US.
+                </p>
+                <a href="#contact" class="hero-cta resume-button text-lg">Let's Talk Data!</a>
+            </div>
+        </section>
+
+        <!-- About Section HTML from previous version -->
+        <section id="about" class="section-container">
+            <h2 class="section-title" data-aos="fade-right"><span class="number">01.</span>About Me</h2>
+            <div class="grid md:grid-cols-5 gap-10 lg:gap-16 items-center">
+                <div class="md:col-span-3 about-text" data-aos="fade-up" data-aos-delay="100">
+                    <p>For over 5 years, I've been immersed in the world of data, helping US enterprise clients across diverse sectors like e-commerce, SaaS, and finance to harness the true potential of their information assets. My journey has been about more than just crunching numbers; it's about uncovering the 'why' behind the 'what' and translating those discoveries into tangible business value.</p>
+                    <p>I specialize in leveraging a robust toolkit including Google Analytics 4, Adobe Analytics, SQL, Python, Tableau, and Power BI to build end-to-end analytics solutions – from data extraction and processing to insightful visualization and strategic reporting. I'm proud of my track record: generating over $2M in revenue impact and consistently achieving 30%+ improvements in campaign performances, all while maintaining a 99.5% data accuracy benchmark.</p>
+                    <p class="font-semibold text-text-star-white mt-6">Core technical proficiencies:</p>
+                    <ul class="about-skills-list mt-3">
+                        <li><i class="fas fa-terminal"></i>SQL & Databases (BigQuery, PostgreSQL)</li>
+                        <li><i class="fab fa-python"></i>Python for Data Science (Pandas, NumPy)</li>
+                        <li><i class="fas fa-chart-line"></i>BI Tools (Tableau, Power BI, Looker Studio)</li>
+                        <li><i class="fas fa-cogs"></i>Web Analytics (GA4, Adobe Analytics)</li>
+                        <li><i class="fas fa-tags"></i>Tag Management (GTM)</li>
+                        <li><i class="fas fa-project-diagram"></i>Data Modeling & ETL</li>
+                    </ul>
+                </div>
+                <div class="md:col-span-2 flex justify-center md:justify-end mt-10 md:mt-0" data-aos="fade-left" data-aos-delay="300">
+                    <div class="about-image-container">
+                        <div class="about-image-wrapper">
+                            <img src="https://via.placeholder.com/320x400/0F173A/f0f8ff?text=MH" alt="Mehedi Hasan" class="w-full h-auto">
+                            <div class="about-image-overlay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section HTML from previous version -->
+        <section id="experience" class="section-container">
+            <h2 class="section-title" data-aos="fade-right"><span class="number">02.</span>Professional Journey</h2>
+            <div class="experience-timeline mt-16">
+                <div class="timeline-item" data-aos="fade-up">
+                    <div class="timeline-item-content">
+                        <h3 class="timeline-title">Senior Data Analytics Manager</h3>
+                        <p class="timeline-company">Amsive Digital (US Advertising Agency)</p>
+                        <p class="timeline-date">September 2022 – Present  | New York, NY</p>
+                        <ul class="timeline-details">
+                            <li>Led analytics strategy for 50+ enterprise clients, enhancing campaign performance by 30% and driving $2M+ in incremental revenue through data-driven optimizations.</li>
+                            <li>Engineered and managed SQL-based data pipelines processing over 10M monthly data points, ensuring 99.5% accuracy for cross-channel attribution and performance measurement.</li>
+                            <li>Developed interactive Tableau and Power BI dashboards, significantly reducing reporting time by 50% and enabling agile, data-informed decision-making for C-suite stakeholders.</li>
+                            <li>Championed advanced A/B testing methodologies, resulting in a 25% increase in qualified lead generation via statistical optimization insights.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
+                     <div class="timeline-item-content">
+                        <h3 class="timeline-title">Data Analytics Consultant (Top 3%)</h3>
+                        <p class="timeline-company">Upwork (Global Freelance Platform)</p>
+                        <p class="timeline-date">January 2021 – Present | Remote</p>
+                        <ul class="timeline-details">
+                            <li>Achieved "Top-Rated Plus" distinction with a consistent 100% client satisfaction score, delivering bespoke enterprise analytics solutions for over 100 clients in e-commerce, SaaS, and financial services.</li>
+                            <li>Implemented robust GA4 and Adobe Analytics frameworks with a 40% improvement in data accuracy, establishing reliable measurement for critical business KPIs.</li>
+                            <li>Designed and deployed customer segmentation models using SQL and Python, leading to a 35% uplift in campaign engagement and customer retention rates.</li>
+                        </ul>
+                    </div>
+                </div>
+                 <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+                     <div class="timeline-item-content">
+                        <h3 class="timeline-title">Data Analyst & BI Specialist</h3>
+                        <p class="timeline-company">Global Childhood Academy Inc.</p>
+                        <p class="timeline-date">February 2019 – August 2022 | Washington, DC</p>
+                        <ul class="timeline-details">
+                            <li>Optimized marketing spend through meticulous ROI analysis and A/B testing, achieving a 15% reduction in customer acquisition costs while maintaining growth targets.</li>
+                            <li>Established foundational enterprise data tracking infrastructure, significantly elevating data quality and fostering a proactive data-driven decision-making culture across the organization.</li>
+                            <li>Conducted in-depth customer lifetime value (CLV) analysis using statistical modeling, which informed retention strategies that boosted user engagement by 20%.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section HTML from previous version -->
+        <section id="skills" class="section-container">
+            <h2 class="section-title" data-aos="fade-right"><span class="number">03.</span>Technical Arsenal</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10 mt-16">
+                <div class="skill-category" data-aos="fade-up">
+                    <h3 class="skill-category-title"><i class="fas fa-database"></i>Data Extraction & Manipulation</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">SQL (Expert)</span><span class="skill-tag">Python (Pandas, NumPy)</span>
+                        <span class="skill-tag">ETL Development</span><span class="skill-tag">Data Cleaning</span>
+                        <span class="skill-tag">API Integration</span><span class="skill-tag">BigQuery</span><span class="skill-tag">PostgreSQL</span>
+                    </div>
+                </div>
+                <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="skill-category-title"><i class="fas fa-chart-line"></i>Analysis & Modeling</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">Statistical Analysis</span><span class="skill-tag">Predictive Modeling (Basic)</span>
+                        <span class="skill-tag">Segmentation</span><span class="skill-tag">Cohort Analysis</span>
+                        <span class="skill-tag">A/B Testing</span><span class="skill-tag">Hypothesis Testing</span><span class="skill-tag">Regression</span>
+                    </div>
+                </div>
+                <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="skill-category-title"><i class="fas fa-tachometer-alt"></i>BI & Visualization</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">Tableau Desktop & Server</span><span class="skill-tag">Microsoft Power BI</span>
+                        <span class="skill-tag">Looker Studio (GDS)</span><span class="skill-tag">Dashboard Design</span>
+                        <span class="skill-tag">Data Storytelling</span><span class="skill-tag">Advanced Excel</span>
+                    </div>
+                </div>
+                <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="skill-category-title"><i class="fas fa-digital-tachograph"></i>Web & Digital Analytics</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">Google Analytics 4 (GA4)</span><span class="skill-tag">Adobe Analytics</span>
+                        <span class="skill-tag">Google Tag Manager (GTM)</span><span class="skill-tag">Segment CDP</span>
+                        <span class="skill-tag">Conversion Rate Optimization (CRO)</span>
+                    </div>
+                </div>
+                 <div class="skill-category" data-aos="fade-up" data-aos-delay="400">
+                    <h3 class="skill-category-title"><i class="fas fa-cloud"></i>Cloud & Data Platforms</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">Google Cloud Platform (GCP)</span><span class="skill-tag">AWS (S3, Redshift Basics)</span>
+                        <span class="skill-tag">Data Warehousing Concepts</span><span class="skill-tag">Salesforce Analytics</span>
+                    </div>
+                </div>
+                 <div class="skill-category" data-aos="fade-up" data-aos-delay="500">
+                    <h3 class="skill-category-title"><i class="fas fa-code-branch"></i>Development & Other</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">Git & GitHub</span><span class="skill-tag">Jupyter Notebooks</span>
+                        <span class="skill-tag">Agile Methodologies</span><span class="skill-tag">Technical Documentation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section HTML from previous version -->
+        <section id="projects" class="section-container">
+            <h2 class="section-title" data-aos="fade-right"><span class="number">04.</span>Featured Case Studies</h2>
+            <div class="projects-grid mt-16">
+                <div class="project-card" data-project-tilt>
+                    <div class="project-header">
+                        <i class="project-icon fas fa-users"></i>
+                        <div class="project-links">
+                            <a href="#" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="#" target="_blank" aria-label="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Enterprise Customer Segmentation</h3>
+                    <p class="project-description">Developed advanced customer segmentation models using SQL and Python for a SaaS client, resulting in a 35% improvement in targeted campaign engagement and customer retention.</p>
+                    <div class="project-tech-list">
+                        <span>Python</span><span>SQL</span><span>Segmentation</span><span>Machine Learning (Clustering)</span>
+                    </div>
+                </div>
+                <div class="project-card" data-project-tilt data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-header">
+                        <i class="project-icon fas fa-funnel-dollar"></i>
+                        <div class="project-links">
+                            <a href="#" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">E-commerce Conversion Funnel Optimization</h3>
+                    <p class="project-description">Led a data-driven initiative to optimize an e-commerce conversion funnel. Leveraged GA4 insights and A/B testing to identify bottlenecks, boosting overall conversion rate by 22%.</p>
+                    <div class="project-tech-list">
+                        <span>GA4</span><span>A/B Testing</span><span>CRO</span><span>Tableau</span><span>SQL</span>
+                    </div>
+                </div>
+                <div class="project-card" data-project-tilt data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-header">
+                        <i class="project-icon fas fa-robot"></i>
+                        <div class="project-links">
+                            <a href="#" target="_blank" aria-label="Live Demo"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Automated Reporting & BI Solution</h3>
+                    <p class="project-description">Architected and deployed an automated reporting system using Power BI and SQL data pipelines for a financial services firm, reducing manual reporting efforts by 80 hours/month.</p>
+                    <div class="project-tech-list">
+                        <span>Power BI</span><span>SQL Server</span><span>ETL</span><span>Automation</span><span>DAX</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section HTML from previous version -->
+        <section id="contact" class="section-container">
+            <div class="contact-content" data-aos="zoom-in-up">
+                <h3 class="contact-title">05. Let's Innovate with Data</h3>
+                <h2 class="contact-heading">Ready to Collaborate?</h2>
+                <p class="contact-text">
+                    I'm passionate about leveraging data to solve complex problems and drive impactful outcomes. If you're looking for a dedicated Data Analyst with a strong track record and are open to H1B sponsorship, I'd love to connect and explore how I can contribute to your team's success.
+                </p>
+                <a href="mailto:hello@mehedihasan.me" class="contact-button resume-button">Reach Out!</a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <!-- Footer HTML from previous version -->
+        <div class="footer-social-links" data-aos="fade-up">
+            <a href="https://linkedin.com/in/creativemehedi" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com/creativemehedi" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://behance.net/creativemehedi" target="_blank" aria-label="Behance (Portfolio Visuals)"><i class="fab fa-behance"></i></a>
+        </div>
+        <p class="footer-text" data-aos="fade-up" data-aos-delay="100">&copy; 2024 MD Mehedi Hasan. All Rights Reserved.</p>
+        <p class="footer-text" data-aos="fade-up" data-aos-delay="150">Engineered with <i class="fas fa-brain text-accent-pulsar-purple text-xs"></i> & <i class="fas fa-code text-accent-hyperdrive-cyan text-xs"></i></p>
+    </footer>
+
+    <a href="#" id="back-to-top" class="hidden" aria-label="Back to top"><i class="fas fa-chevron-up"></i></a>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // --- Preloader ---
+        $(window).on('load', function() {
+            $('#preloader').addClass('loaded');
+        });
+
+        $(document).ready(function() {
+            AOS.init({
+                duration: 700,
+                easing: 'ease-out-cubic',
+                once: true,
+                offset: 80,
+            });
+
+            // --- Typed.js ---
+            if ($('#typed-hero-subtitle').length) {
+                new Typed('#typed-hero-subtitle', {
+                    strings: [
+                        "I architect data-driven solutions.",
+                        "I translate numbers into narratives.",
+                        "I empower decisions with insights."
+                    ],
+                    typeSpeed: 55, backSpeed: 35, backDelay: 2200, loop: true, smartBackspace: true,
+                });
+            }
+
+            // --- Navigation ---
+            const $header = $('#main-header');
+            let lastScrollTop = 0;
+            const $navLinks = $('#main-header .nav-link[href^="#"], #mobile-menu .nav-link[href^="#"]');
+            const $sections = $('section[id]');
+
+            $(window).on('scroll', function() {
+                let scrollTop = $(this).scrollTop();
+                if (scrollTop > 60) { $header.addClass('nav-scrolled'); }
+                else { $header.removeClass('nav-scrolled'); }
+
+                if (scrollTop > lastScrollTop && scrollTop > $header.outerHeight()){ $header.addClass('nav-hidden'); }
+                else { $header.removeClass('nav-hidden'); }
+                lastScrollTop = scrollTop;
+
+                // Active Nav Link
+                let currentSectionId = '';
+                $sections.each(function() {
+                    const sectionTop = $(this).offset().top;
+                    if (scrollTop >= sectionTop - $header.outerHeight() - 150) {
+                        currentSectionId = $(this).attr('id');
+                    }
+                });
+                $navLinks.removeClass('active');
+                if (currentSectionId) {
+                    $navLinks.filter('[href="#' + currentSectionId + '"]').addClass('active');
+                } else if (scrollTop < $($navLinks.first().attr('href')).offset().top - $header.outerHeight() - 150) {}
+            });
+            $(window).trigger('scroll');
+
+            // --- Mobile Menu ---
+            $('#mobile-menu-toggle').on('click', function() {
+                $('#mobile-menu').toggleClass('-translate-x-full');
+                $(this).find('i').toggleClass('fa-bars fa-times');
+                $('body').toggleClass('overflow-hidden md:overflow-auto');
+            });
+            $('#mobile-menu a').on('click', function() {
+                $('#mobile-menu').addClass('-translate-x-full');
+                $('#mobile-menu-toggle i').removeClass('fa-times').addClass('fa-bars');
+                $('body').removeClass('overflow-hidden md:overflow-auto');
+            });
+
+            // --- Smooth Scroll ---
+            $('a[href*="#"]').not('[href="#"]').not('[href="#0"]').click(function(event) {
+                if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+                    var target = $(this.hash);
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    if (target.length) {
+                        event.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - ($('#main-header').outerHeight() || 0) + 1
+                        }, 800);
+                    }
+                }
+            });
+
+            // --- Back to Top Button ---
+            const $backToTop = $('#back-to-top');
+            $(window).on('scroll', function() {
+                if ($(this).scrollTop() > 400) { $backToTop.fadeIn().removeClass('hidden'); }
+                else { $backToTop.fadeOut(); }
+            });
+             $backToTop.on('click', function(e) { e.preventDefault(); $('html, body').animate({scrollTop:0}, 600); });
+
+
+            // --- 3D Project Card Tilt Effect ---
+            const projectCards = document.querySelectorAll('[data-project-tilt]');
+            projectCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    const rotateY = (x / (rect.width / 2)) * 8; // Reduced tilt
+                    const rotateX = -(y / (rect.height / 2)) * 8; // Reduced tilt
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`; // Reduced scale
+                    card.style.boxShadow = `${-rotateY/1.5}px ${rotateX/1.5}px 25px rgba(0, 245, 212, 0.1)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+                    card.style.boxShadow = 'none';
+                });
+            });
+
+            // --- New "Cosmic Network" Particles.js ---
+            if (document.getElementById('particles-js-hero')) {
+                tsParticles.load("particles-js-hero", {
+                    fpsLimit: 60,
+                    particles: {
+                        number: {
+                            value: 70, // Adjusted number of particles
+                            density: {
+                                enable: true,
+                                value_area: 900 // Area for density calculation
+                            }
+                        },
+                        color: {
+                            value: "#b0bec5" // Particle color (bluish light gray for stars)
+                        },
+                        shape: {
+                            type: "circle",
+                        },
+                        opacity: {
+                            value: {min: 0.2, max: 0.7}, // Random opacity for twinkling effect
+                            animation: { // Opacity animation
+                                enable: true,
+                                speed: 0.8,
+                                minimumValue: 0.1,
+                                sync: false
+                            }
+                        },
+                        size: {
+                            value: {min: 0.5, max: 2.2}, // Random size for stars
+                        },
+                        links: {
+                            enable: true,
+                            distance: 160, // Max distance for links
+                            color: "rgba(0, 245, 212, 0.15)", // Link color (accent cyan, more subtle)
+                            opacity: 0.25,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 0.4, // Slower movement speed
+                            direction: "none",
+                            random: true,
+                            straight: false,
+                            outModes: { default: "out" },
+                        }
+                    },
+                    interactivity: {
+                        events: {
+                            onHover: {
+                                enable: true,
+                                mode: "grab" // Interaction mode on hover
+                            },
+                            onClick: {
+                                enable: true,
+                                mode: "push"
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            grab: {
+                                distance: 150,
+                                links: { opacity: 0.5 } // Make grabbed links more visible
+                            },
+                            push: { quantity: 3 },
+                            bubble: { distance: 200, size: 5, duration: 2, opacity: 0.8 }, // Kept for potential future use
+                        }
+                    },
+                    detectRetina: true,
+                    background: {
+                        color: "transparent"
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
